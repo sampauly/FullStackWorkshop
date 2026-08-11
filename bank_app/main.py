@@ -22,15 +22,25 @@ def main():
     # initialize a customer at citi bank
     sam = Customer(name="Sam", email="samuelpauly02@gmail.com", branch_id=citi_bank.branch_id, customer_id=1)
 
+    # create another curstomer
+    tommy = Customer(name="Tommy", email="tommythecat@gmail.com", branch_id=citi_bank.branch_id, customer_id=2)
+
     citi_bank.add_customer(sam)
+    citi_bank.add_customer(tommy)
 
     # initialize bank accounts for new customer
     checking = CheckingAccount(account_id="C01", balance=150)
     savings = SavingsAccount(account_id="S01", balance=20000)
 
+    checking_2 = CheckingAccount(account_id="C02", balance=50)
+    savings_2 = SavingsAccount(account_id="S02", balance=150)
+
     # add bank accounts to customer accounts
     sam.accounts.append(checking)
     sam.accounts.append(savings)
+
+    tommy.accounts.append(checking)
+    tommy.accounts.append(savings)
 
     # output user console
     while True:
@@ -61,12 +71,25 @@ def main():
                 except ValueError as e:
                     print(f"Withdrawal failed: {e}")
             case 4:
-                print("Coming soon")
+                from_id = input("Enter the account ID to transfer from: ")
+                amount = float(input("Enter the amount to transfer: "))
+                to_id = input("Enter the account ID to transfer to: ")
+                from_acct = find_account(sam, from_id)
+                if from_acct is None:
+                    print("Account not found")
+                    continue
+                to_acct = find_account(sam, to_id)
+                if to_acct is None:
+                    print("Account not found")
+                    continue
+                citi_bank.transfer(from_acct, to_acct, amount)
+                print(f"New balances:\n{from_id}:   ${from_acct.balance}\n{to_id}:    ${to_acct.balance}")
             case 5:
                 print("Goodbye")
                 break
             case _:
                 print("Invalid command")
+
 
 if __name__ == "__main__":
     main()
