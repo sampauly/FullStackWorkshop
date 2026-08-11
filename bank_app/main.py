@@ -39,8 +39,8 @@ def main():
     sam.accounts.append(checking)
     sam.accounts.append(savings)
 
-    tommy.accounts.append(checking)
-    tommy.accounts.append(savings)
+    tommy.accounts.append(checking_2)
+    tommy.accounts.append(savings_2)
 
     # output user console
     while True:
