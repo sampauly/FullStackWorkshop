@@ -1,7 +1,7 @@
 """ Define abstract class for generic account details and abstract method for withdraws """
 
 from abc import ABC, abstractmethod
-from transaction import Transaction
+from models.transaction import Transaction
 
 # Base class
 class Account(ABC):

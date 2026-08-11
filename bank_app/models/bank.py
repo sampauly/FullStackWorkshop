@@ -1,7 +1,7 @@
 """ Defines bank class """
-from customer import Customer
-from transaction import Transaction
-from accounts import Account
+from models.customer import Customer
+from models.transaction import Transaction
+from models.accounts import Account
 
 
 class Bank:
