@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { fetchCustomers, createCustomer, type Customer } from '../services/customerService'
+import { fetchCustomers, createCustomer, type Customer, fetchCustomerById } from '../services/customerService'
 
 const ServicesPage = () => {
     const [customers, setCustomers] = useState<Customer[]>([])
@@ -7,6 +7,8 @@ const ServicesPage = () => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [branchId, setBranchId] = useState('')
+    const [customerId, setCustomerId] = useState('')
+    const [foundCustomer, setFoundCustomer] = useState<Customer | null>(null)
 
     const handleLoadCustomers = async () => {
         setError('')
@@ -30,6 +32,17 @@ const ServicesPage = () => {
         }
     }
 
+    const handleFindCustomer = async () => {
+        setError('')
+        try {
+            const data = await fetchCustomerById(customerId)
+            setFoundCustomer(data)
+            setCustomerId('')
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Uknown error")
+        }
+    }
+
     return (
         <div style={{ padding: '20px' }}>
             <h1>Customers</h1>
@@ -48,8 +61,24 @@ const ServicesPage = () => {
                 value={branchId}
                 onChange={(e) => setBranchId(e.target.value)}
             />
+
             <button onClick={handleAddCustomer}>Add Customer</button>
+            
             <button onClick={handleLoadCustomers}>Load Customers</button>
+
+            <input
+                placeholder="Customer ID"
+                value={customerId}
+                onChange={(e) => setCustomerId(e.target.value)}
+            />
+
+            <button onClick={handleFindCustomer}>Find Customer By ID</button>
+
+            {foundCustomer && (
+                <p>Found: {foundCustomer.name} - {foundCustomer.email} - {foundCustomer.branch_id}</p>
+            )}
+
+
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <ul>
                 {customers.map((c) => (

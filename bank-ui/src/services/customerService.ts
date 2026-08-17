@@ -26,3 +26,20 @@ export const createCustomer = async (name: string, email: string, branchId: stri
     }
     return response.json()
 }
+
+export const fetchCustomerById = async (customerId: string): Promise<Customer> => {
+    const response = await fetch(`${API_URL}/${customerId}`)
+    if (!response.ok) {
+        throw new Error(`Failed to find customer (${response.status})`)
+    }
+    return response.json()
+}
+
+export const deleteCustomer = async (customerId: string): Promise<void> => {
+    const response = await fetch(`${API_URL}/${customerId}`, {
+        method: 'DELETE',
+    })
+    if (!response.ok) {
+        throw new Error(`Failed to find customer (${response.status})`)
+    }
+}
