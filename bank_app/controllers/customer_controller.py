@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from services.customer_service import customer_service
 
 router = APIRouter(prefix="/api/v1/customers")
@@ -47,6 +47,27 @@ def list_customers():
         )
         for c in customers
     ]
+
+# GET Method for finding a certain customer 
+@router.get("/{customer_id}", response_model=CustomerResponse)
+def get_customer(customer_id: str):
+    customer = customer_service.get_customer(customer_id)
+    if not customer:
+        raise HTTPException(status_code=404, detail="Customer not found")
+    return CustomerResponse(
+        id=str(customer["_id"]),
+        name=customer["name"],
+        email=customer["email"],
+        branch_id=customer["branch_id"],
+    )
+
+
+# DELETE Method for finding a certain customer
+@router.delete("/{customer_id}", status_code=204)
+def delete_customer(customer_id: str):
+    deleted_customer = customer_service.delete_customer(customer_id)
+    if not deleted_customer:
+        raise HTTPException(status_code=404, detail="Customer not found")
 
 
 
